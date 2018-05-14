@@ -120,6 +120,11 @@ object List { // `List` companion object. Contains functions for creating and wo
   // They do work for division, but I suppose that they might break if I tried to do
   // any kind of short-circuiting -- they would start from the wrong end of the list,
   // and thus short-circuit earlier or later than a TRUE fold left or right would have.
+  // Further note, from coming back later: foldRight can't genuinely short-circuit unless
+  // we're working off of a lazy list. See chapter 5. We can only short-circuit a traversal
+  // if our function is taking an argument "by name" (non-strictly, using the `=>` syntax
+  // before the argument's type) AND that function is not forcing the second argument in its
+  // body (because, say, it's using a nonstrict operator like `&&` or `||`).
   def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B) =
     foldRight(l, z)((a, b) => f(b, a))
 
