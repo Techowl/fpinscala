@@ -202,10 +202,10 @@ case class State[S,+A](run: S => (A, S)) {
   // you apply me to your existing state, the value that you'll get is actually
   // your current state, and then I'll leave that state unchanged by passing it
   // through as next state." This is kind of a neat trick: instead of returning
-  // the same kind of `A` we usually expected, this is using the same sort of
-  // output socket (obv a misuse of 'socket', but I'm thinking in terms of a
-  // function as a machine with designated input and output locations) to return
-  // a state value instead.
+  // the same type `A` we usually expected, this is using the same 'output socket'
+  // of sorts (obv a misuse of 'socket', but I'm thinking in terms of a function
+  // as a machine with designated input and output locations) to return a state
+  // value instead.
   def get: State[S, S] = State(s => (s, s))
 
   // `set` is a state action that ignores current state, just gives unit as a value,
@@ -220,6 +220,7 @@ case class State[S,+A](run: S => (A, S)) {
   // aren't using a mutable model here, where there's some object with a "current state" field
   // that keeps being changed. We aren't even using a technically-immutable version of that
   // where we copy the old object into a new object with a different "current state" field.
+  // (NB: we sort of are though, in the Machine exercise below.)
   // Instead, we're chaining a bunch of functions together, those functions being "state actions"
   // of type `S => (A, S)`. When I talk about the "current state", I'm talking about whatever
   // the last result._2 value is -- whatever the final state value from that return tuple would
